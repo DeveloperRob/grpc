@@ -13,7 +13,7 @@ if test "$PHP_GRPC" != "no"; then
     for i in $SEARCH_PATH ; do
       if test -r $i/$SEARCH_FOR; then
         GRPC_DIR=$i
-        AC_MSG_RESULT(found in $i, using libgrpc-dev)
+        AC_MSG_RESULT(using libgrpc-dev, found in $i)
       fi
     done
   fi
@@ -37,7 +37,6 @@ if test "$PHP_GRPC" != "no"; then
     PHP_REQUIRE_CXX()
   else
     PHP_ADD_INCLUDE($GRPC_DIR/include)
-    PHP_ADD_INCLUDE(PHP_EXT_SRCDIR()/include)
     dnl  PHP_ADD_LIBRARY(pthread,,GRPC_SHARED_LIBADD)
   fi
 
@@ -61,7 +60,6 @@ if test "$PHP_GRPC" != "no"; then
       PHP_ADD_LIBRARY(rt)
       ;;
   esac
-  PHP_SUBST(GRPC_SHARED_LIBADD)
   
   if test -n "$GRPC_DIR"; then
     GRPC_LIBDIR=$GRPC_DIR/${GRPC_LIB_SUBDIR-lib}
@@ -77,6 +75,8 @@ if test "$PHP_GRPC" != "no"; then
       -L$GRPC_LIBDIR
     ])
 
+    PHP_SUBST(GRPC_SHARED_LIBADD)
+
     PHP_NEW_EXTENSION(
       grpc,
       src/php/ext/grpc/byte_buffer.c \
@@ -91,7 +91,9 @@ if test "$PHP_GRPC" != "no"; then
       src/php/ext/grpc/php_grpc.c \
       , $ext_shared, , -Wall -Werror -std=c11 \
       -DGRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK=1)
-  else
+  else  
+    PHP_SUBST(GRPC_SHARED_LIBADD)
+
     PHP_NEW_EXTENSION(grpc,
       src/core/call/call_arena_allocator.cc \
       src/core/call/call_filters.cc \
