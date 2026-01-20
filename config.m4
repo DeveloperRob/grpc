@@ -60,10 +60,22 @@ if test "$PHP_GRPC" != "no"; then
       PHP_ADD_LIBRARY(rt)
       ;;
   esac
-
   PHP_SUBST(GRPC_SHARED_LIBADD)
   
   if test -n "$GRPC_DIR"; then
+    GRPC_LIBDIR=$GRPC_DIR/${GRPC_LIB_SUBDIR-lib}
+    PHP_ADD_LIBPATH($GRPC_LIBDIR)
+    PHP_CHECK_LIBRARY(grpc,grpc_channel_destroy,
+    [
+      PHP_ADD_LIBRARY(grpc,,GRPC_SHARED_LIBADD)
+      dnl PHP_ADD_LIBRARY_WITH_PATH(grpc, $GRPC_DIR/lib, GRPC_SHARED_LIBADD)
+      AC_DEFINE(HAVE_GRPCLIB,1,[ ])
+    ],[
+      AC_MSG_ERROR([wrong grpc lib version or lib not found])
+    ],[
+      -L$GRPC_LIBDIR
+    ])
+
     PHP_NEW_EXTENSION(
       grpc,
         src/php/ext/grpc/byte_buffer.c \
