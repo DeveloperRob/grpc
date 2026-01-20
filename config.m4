@@ -76,9 +76,9 @@ if test "$PHP_GRPC" != "no"; then
         src/php/ext/grpc/server.c \
         src/php/ext/grpc/server_credentials.c \
         src/php/ext/grpc/php_grpc.c, \
-      $ext_shared,
-      ,
-      -Wall -Werror -std=c11 -DGRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK=1
+        $ext_shared, \
+        , \
+        -Wall -Werror -std=c11 -DGRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK=1 \
     )
   else
     PHP_NEW_EXTENSION(grpc,
