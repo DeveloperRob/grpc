@@ -37,6 +37,7 @@ if test "$PHP_GRPC" != "no"; then
     PHP_REQUIRE_CXX()
   else
     PHP_ADD_INCLUDE($GRPC_DIR/include)
+    PHP_ADD_INCLUDE(PHP_EXT_SRCDIR()/include)
     dnl  PHP_ADD_LIBRARY(pthread,,GRPC_SHARED_LIBADD)
   fi
 
