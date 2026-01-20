@@ -90,14 +90,6 @@ if test "$PHP_GRPC" != "no"; then
       src/php/ext/grpc/php_grpc.c \
       , $ext_shared, , -Wall -Werror -std=c11 \
       -DGRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK=1)
-
-third_party/utf8_range/utf8_range.c \
-      , $ext_shared, , -fvisibility=hidden \
-      -DOPENSSL_NO_ASM -D_GNU_SOURCE -DWIN32_LEAN_AND_MEAN \
-      -D_HAS_EXCEPTIONS=0 -DNOMINMAX -DGRPC_ARES=0 \
-      -DGRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK=1 \
-      -DGRPC_XDS_USER_AGENT_NAME_SUFFIX='"\"PHP\""' \
-      -DGRPC_XDS_USER_AGENT_VERSION_SUFFIX='"\"1.76.0\""')
   else
     PHP_NEW_EXTENSION(grpc,
       src/core/call/call_arena_allocator.cc \
