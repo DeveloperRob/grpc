@@ -13,7 +13,7 @@ if test "$PHP_GRPC" != "no"; then
     for i in $SEARCH_PATH ; do
       if test -r $i/$SEARCH_FOR; then
         GRPC_DIR=$i
-        AC_MSG_RESULT(found in $i)
+        AC_MSG_RESULT(found in $i, using libgrpc-dev)
       fi
     done
   fi
@@ -64,9 +64,22 @@ if test "$PHP_GRPC" != "no"; then
   PHP_SUBST(GRPC_SHARED_LIBADD)
   
   if test -n "$GRPC_DIR"; then
-    PHP_NEW_EXTENSION(grpc, byte_buffer.c call.c call_credentials.c channel.c \
-    channel_credentials.c completion_queue.c timeval.c server.c \
-    server_credentials.c php_grpc.c, $ext_shared, , -Wall -Werror -std=c11 -DGRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK=1)
+    PHP_NEW_EXTENSION( \
+      grpc, \
+        src/php/ext/grpc/byte_buffer.c \
+        src/php/ext/grpc/call.c \
+        src/php/ext/grpc/call_credentials.c \
+        src/php/ext/grpc/channel.c \
+        src/php/ext/grpc/channel_credentials.c  \
+        src/php/ext/grpc/completion_queue.c  \
+        src/php/ext/grpc/timeval.c  \
+        src/php/ext/grpc/server.c \
+        src/php/ext/grpc/server_credentials.c \
+        src/php/ext/grpc/php_grpc.c, \
+      $ext_shared, \
+      , \
+      -Wall -Werror -std=c11 -DGRPC_POSIX_FORK_ALLOW_PTHREAD_ATFORK=1 \
+    )
   else
     PHP_NEW_EXTENSION(grpc,
       src/core/call/call_arena_allocator.cc \
